@@ -34,7 +34,9 @@ const customTooltip = (tooltipItems: TooltipItem<'line'>[]) => {
   let sum = 0;
 
   tooltipItems.forEach(function (tooltipItem) {
-    sum += tooltipItem.parsed.y;
+    if (tooltipItem.parsed.y !== null && tooltipItem.parsed.y !== undefined) {
+      sum += tooltipItem.parsed.y;
+    }
   });
   return "Sum: " + sum;
 };
