@@ -13,6 +13,13 @@ def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ) -> User:
+    # DEVELOPMENT: Accept dev bypass token
+    if token == "dev-token-bypass":
+        # Return the system admin user for development
+        user = db.query(User).filter(User.email == "admin@sairan.ph").first()
+        if user:
+            return user
+
     try:
         payload = decode_token(token)
         user_id = int(payload["sub"])
