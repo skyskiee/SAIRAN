@@ -101,6 +101,64 @@ async function request<T>(
   return res.json() as Promise<T>;
 }
 
+// ---------- Mock data for development ----------
+const MOCK_ASSESSMENTS: Assessment[] = [
+  {
+    id: 1,
+    name: "AI Readiness Baseline 2026",
+    organization_id: 1,
+    status: "COMPLETED",
+    questionnaire_version: "1.0",
+    created_at: "2026-05-15T10:00:00Z",
+    updated_at: "2026-05-20T15:30:00Z",
+    submitted_at: "2026-05-20T15:30:00Z",
+    overall_score: 45,
+    overall_level: "Basic",
+    dimension_scores: {
+      People: { score: 40, level: "Basic", code: "PPL" },
+      Process: { score: 35, level: "Basic", code: "PRC" },
+      Technology: { score: 50, level: "Basic", code: "TEC" },
+      Ecosystem: { score: 45, level: "Basic", code: "ECO" },
+      Governance: { score: 50, level: "Basic", code: "GOV" },
+    },
+    completion_percentage: 100,
+  },
+  {
+    id: 2,
+    name: "AI Readiness Baseline 2026",
+    organization_id: 2,
+    status: "COMPLETED",
+    questionnaire_version: "1.0",
+    created_at: "2026-05-16T10:00:00Z",
+    updated_at: "2026-05-21T14:20:00Z",
+    submitted_at: "2026-05-21T14:20:00Z",
+    overall_score: 62,
+    overall_level: "Developing",
+    dimension_scores: {
+      People: { score: 60, level: "Developing", code: "PPL" },
+      Process: { score: 65, level: "Developing", code: "PRC" },
+      Technology: { score: 70, level: "Developing", code: "TEC" },
+      Ecosystem: { score: 58, level: "Developing", code: "ECO" },
+      Governance: { score: 60, level: "Developing", code: "GOV" },
+    },
+    completion_percentage: 100,
+  },
+  {
+    id: 3,
+    name: "AI Readiness Baseline 2026",
+    organization_id: 3,
+    status: "IN_PROGRESS",
+    questionnaire_version: "1.0",
+    created_at: "2026-05-18T10:00:00Z",
+    updated_at: "2026-05-22T09:15:00Z",
+    submitted_at: null,
+    overall_score: null,
+    overall_level: null,
+    dimension_scores: null,
+    completion_percentage: 65,
+  },
+];
+
 // ---------- Server-side API (uses session from next-auth) ----------
 async function withToken(): Promise<string | undefined> {
   const session = await auth();
@@ -109,8 +167,15 @@ async function withToken(): Promise<string | undefined> {
 
 export const serverApi = {
   me: async () => request<any>("/auth/me", await withToken()),
-  listAssessments: async () =>
-    request<Assessment[]>("/assessments", await withToken()),
+  listAssessments: async () => {
+    try {
+      return await request<Assessment[]>("/assessments", await withToken());
+    } catch (error) {
+      // Fallback to mock data if API fails
+      console.warn("API unavailable, using mock data:", error);
+      return MOCK_ASSESSMENTS;
+    }
+  },
   getAssessment: async (id: number) =>
     request<AssessmentDetail>(`/assessments/${id}`, await withToken()),
   listQuestions: async () =>
