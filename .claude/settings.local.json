@@ -5,7 +5,13 @@
       "Bash(npx tsc *)",
       "Bash(npx next *)",
       "Bash(curl -s -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"orgadmin@sampleb.com\",\"password\":\"demo123\"}')",
-      "Bash(.venv/Scripts/python.exe -c ' *)"
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(git remote *)",
+      "Bash(git restore *)",
+      "Bash(git add *)",
+      "Bash(python -m venv .venv)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
