@@ -12,14 +12,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         email: {},
         password: {},
       },
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         if (!credentials?.email || !credentials?.password) return null;
 
         // DEVELOPMENT: Bypass authentication - accept any email/password
         return {
           id: "dev-user-1",
           email: credentials.email,
-          name: credentials.email.split("@")[0],
+          name: (credentials.email as string).split("@")[0],
           role: "SYSTEM_ADMIN",
           organizationId: "1",
           accessToken: "dev-token-bypass",
